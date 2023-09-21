@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+    - main
+resources:
+  pipelines:
+  - pipeline: daftFeatureTest
+    source: daft.feature.test-ci
+    trigger:
+      enabled: true
+pool:
+  vmImage: ubuntu-latest
+stages:
+ - stage: DevDaftFeatureTest
+   dependsOn: []
+   displayName: 'Daft Keyword Feature Test'
+   jobs:
+     - job: DevDaftFeature
+       displayName: 'Dev - DaftFeature'
+       pool: <poolname>
+       steps:
+         - task: DownloadBuildArtifacts@0
+           inputs:
+             buildType: 'specific'
+             project: '<projectdetail>'
+             pipeline: '<pipelineNo>'
+             buildVersionToDownload: 'latest'
+             downloadType: 'single'
+             artifactName: 'Daft.Feature.Test'
+             downloadPath: '$(Build.ArtifactStagingDirectory)'
+         - task: UseDotNet@2
+           displayName: 'Install .NET Core sdk 3.x'
+           inputs:
+             version: 3.x
+         - task: DotNetCoreCLI@2
+           inputs:
+                 command: 'test'
+                 projects: '$(Build.ArtifactStagingDirectory)/Daft.Feature.Test/Daft.Feature.Test.dll'
+                 arguments: '--filter "FullyQualifiedName~Daft_KeywordFilter_TestFeature"'
+                 testRunTitle: 'Specflow Tests'
