@@ -9,3 +9,7 @@ that the filter was applied correctly (check that the “garage” keyword is th
 
 Required Environment and Framework:
 Microsoft Visual Studio (.Net Core 3.1)
+
+Sample CI/CD Attached (Azure Yaml pipeline).
+
+Sample Test Video Recording Attached.
